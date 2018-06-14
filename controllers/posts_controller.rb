@@ -10,12 +10,22 @@ class PostsController < Sinatra::Base
 
   # INDEX
   get '/' do
-    "hello world"
+
+   @title = "Blog posts"
+
+   @posts = Post.all
+
+   erb :'posts/index'
+
   end
 
   # NEW
   get '/new' do
-    "new page"
+
+    @post = Post.new
+
+    erb :'posts/new'
+
   end
 
   # SHOW
@@ -23,27 +33,60 @@ class PostsController < Sinatra::Base
 
     id = params[:id].to_i
 
-    "Show page #{ :id }"
+    @post = Post.find id
+
+    erb :'posts/show'
   end
 
   # CREATE
   post '/' do
-    "create something new"
+    post = Post.new
+
+    post.title = params[:title]
+    post.body = params[:body]
+
+    post.save
+
+    redirect '/'
+
   end
 
   # EDIT
   get '/:id/edit' do
-    "Edit page #{ :id }"
+
+    id = params[:id].to_i
+
+    @post = Post.find id
+
+    erb :'posts/edit'
+
   end
 
   # UPDATE
+
+
   put '/:id' do
-    "Update me "
+    id = params[:id].to_i
+
+    post = Post.find id
+
+    post.title = params[:title]
+    post.body = params[:body]
+
+    post.save
+
+    redirect '/'
   end
 
   # DESTROY
   delete '/:id' do
-    "Delete me"
+
+    id = params[:id].to_i
+
+    Post.destroy id
+
+    redirect '/'
+
   end
 
 end
